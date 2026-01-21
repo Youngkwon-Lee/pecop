@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home2/gun3856/PECoP/train_simple.py", line 12, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'

@@ -1,0 +1,104 @@
+Arguments:
+  device: cuda:0
+  height: 256
+  width: 256
+  clip_len: 32
+  crop_sz: 224
+  lr: 0.001
+  bs: 8
+  epoch: 8
+  max_sr: 5
+  max_segment: 4
+  fr: 1
+  pf: 5
+  dataset: PD4T
+  model: i3d
+  pretrained_i3d_weight: /home2/gun3856/PECoP/pretrained_models/model_rgb.pth
+  data_list: /home2/gun3856/PECoP/data_lists/Gait_train.list
+  video_root: /home2/gun3856/PD4T_Videos
+Experiment: PD4T_sr_5_i3d_lr_0.001_len_32_sz_224
+Loading dataset...
+Dataset size: 344
+Building model...
+Starting training...
+[Epoch1/8] Iter0 Loss: 3.0535 Acc: 0.1875
+[Epoch1/8] Iter5 Loss: 2.9549 Acc: 0.3125
+[Epoch1/8] Iter10 Loss: 2.8967 Acc: 0.3125
+[Epoch1/8] Iter15 Loss: 3.0266 Acc: 0.1250
+[Epoch1/8] Iter20 Loss: 2.8392 Acc: 0.3750
+[Epoch1/8] Iter25 Loss: 2.9460 Acc: 0.2500
+[Epoch1/8] Iter30 Loss: 2.7058 Acc: 0.3750
+[Epoch1/8] Iter35 Loss: 2.7285 Acc: 0.3750
+[Epoch1/8] Iter40 Loss: 2.6951 Acc: 0.5000
+[Epoch 1] loss: 2.901, acc: 0.266
+[Epoch2/8] Iter0 Loss: 2.6237 Acc: 0.3750
+[Epoch2/8] Iter5 Loss: 2.8934 Acc: 0.2500
+[Epoch2/8] Iter10 Loss: 2.7690 Acc: 0.1875
+[Epoch2/8] Iter15 Loss: 2.6994 Acc: 0.3125
+[Epoch2/8] Iter20 Loss: 2.7207 Acc: 0.3125
+[Epoch2/8] Iter25 Loss: 2.5128 Acc: 0.5000
+[Epoch2/8] Iter30 Loss: 2.9255 Acc: 0.0000
+[Epoch2/8] Iter35 Loss: 2.8567 Acc: 0.3750
+[Epoch2/8] Iter40 Loss: 2.7232 Acc: 0.3750
+[Epoch 2] loss: 2.798, acc: 0.262
+[Epoch3/8] Iter0 Loss: 2.8332 Acc: 0.3125
+[Epoch3/8] Iter5 Loss: 2.8296 Acc: 0.2500
+[Epoch3/8] Iter10 Loss: 2.7170 Acc: 0.4375
+[Epoch3/8] Iter15 Loss: 2.9038 Acc: 0.1875
+[Epoch3/8] Iter20 Loss: 2.7922 Acc: 0.3125
+[Epoch3/8] Iter25 Loss: 2.7669 Acc: 0.3125
+[Epoch3/8] Iter30 Loss: 2.7975 Acc: 0.2500
+[Epoch3/8] Iter35 Loss: 2.7240 Acc: 0.4375
+[Epoch3/8] Iter40 Loss: 2.8041 Acc: 0.1250
+[Epoch 3] loss: 2.774, acc: 0.288
+[Epoch4/8] Iter0 Loss: 2.6684 Acc: 0.5625
+[Epoch4/8] Iter5 Loss: 2.6311 Acc: 0.5625
+[Epoch4/8] Iter10 Loss: 2.7833 Acc: 0.3750
+[Epoch4/8] Iter15 Loss: 2.7465 Acc: 0.3125
+[Epoch4/8] Iter20 Loss: 2.6438 Acc: 0.5000
+[Epoch4/8] Iter25 Loss: 2.8400 Acc: 0.1875
+[Epoch4/8] Iter30 Loss: 2.6473 Acc: 0.3750
+[Epoch4/8] Iter35 Loss: 2.7245 Acc: 0.2500
+[Epoch4/8] Iter40 Loss: 2.7581 Acc: 0.1875
+[Epoch 4] loss: 2.762, acc: 0.304
+[Epoch5/8] Iter0 Loss: 2.8011 Acc: 0.3125
+[Epoch5/8] Iter5 Loss: 2.7472 Acc: 0.3750
+[Epoch5/8] Iter10 Loss: 2.8086 Acc: 0.3125
+[Epoch5/8] Iter15 Loss: 2.9317 Acc: 0.1875
+[Epoch5/8] Iter20 Loss: 2.7482 Acc: 0.3125
+[Epoch5/8] Iter25 Loss: 2.7412 Acc: 0.2500
+[Epoch5/8] Iter30 Loss: 2.7808 Acc: 0.1250
+[Epoch5/8] Iter35 Loss: 2.7531 Acc: 0.3750
+[Epoch5/8] Iter40 Loss: 2.7841 Acc: 0.2500
+[Epoch 5] loss: 2.755, acc: 0.292
+[Epoch6/8] Iter0 Loss: 2.7200 Acc: 0.2500
+[Epoch6/8] Iter5 Loss: 2.8821 Acc: 0.3125
+[Epoch6/8] Iter10 Loss: 2.7273 Acc: 0.3125
+[Epoch6/8] Iter15 Loss: 2.7689 Acc: 0.3750
+[Epoch6/8] Iter20 Loss: 2.7534 Acc: 0.3750
+[Epoch6/8] Iter25 Loss: 2.7774 Acc: 0.2500
+[Epoch6/8] Iter30 Loss: 2.7004 Acc: 0.3750
+[Epoch6/8] Iter35 Loss: 2.6019 Acc: 0.5000
+[Epoch6/8] Iter40 Loss: 2.6110 Acc: 0.5625
+[Epoch 6] loss: 2.742, acc: 0.311
+[Epoch7/8] Iter0 Loss: 2.7947 Acc: 0.1875
+[Epoch7/8] Iter5 Loss: 2.8363 Acc: 0.1875
+[Epoch7/8] Iter10 Loss: 2.5772 Acc: 0.5000
+[Epoch7/8] Iter15 Loss: 2.7236 Acc: 0.3750
+[Epoch7/8] Iter20 Loss: 2.8105 Acc: 0.2500
+[Epoch7/8] Iter25 Loss: 2.6742 Acc: 0.3125
+[Epoch7/8] Iter30 Loss: 2.8181 Acc: 0.1875
+[Epoch7/8] Iter35 Loss: 2.6431 Acc: 0.3125
+[Epoch7/8] Iter40 Loss: 2.6383 Acc: 0.3125
+[Epoch 7] loss: 2.717, acc: 0.318
+[Epoch8/8] Iter0 Loss: 2.6346 Acc: 0.4375
+[Epoch8/8] Iter5 Loss: 2.7386 Acc: 0.1875
+[Epoch8/8] Iter10 Loss: 2.7692 Acc: 0.3125
+[Epoch8/8] Iter15 Loss: 2.7133 Acc: 0.3125
+[Epoch8/8] Iter20 Loss: 2.5601 Acc: 0.6250
+[Epoch8/8] Iter25 Loss: 3.0430 Acc: 0.1250
+[Epoch8/8] Iter30 Loss: 2.6891 Acc: 0.3750
+[Epoch8/8] Iter35 Loss: 2.7184 Acc: 0.3750
+[Epoch8/8] Iter40 Loss: 2.6139 Acc: 0.2500
+[Epoch 8] loss: 2.702, acc: 0.339
+Training finished!

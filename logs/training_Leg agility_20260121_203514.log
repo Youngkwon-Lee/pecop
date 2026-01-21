@@ -1,0 +1,41 @@
+Arguments:
+  device: cuda:0
+  height: 256
+  width: 256
+  clip_len: 32
+  crop_sz: 224
+  lr: 0.001
+  bs: 8
+  epoch: 8
+  max_sr: 5
+  max_segment: 4
+  fr: 1
+  pf: 5
+  dataset: PD4T
+  model: i3d
+  pretrained_i3d_weight: /home2/gun3856/PECoP/pretrained_models/model_rgb.pth
+  data_list: /home2/gun3856/PECoP/data_lists/Leg agility_train.list
+  video_root: /home2/gun3856/PD4T_Videos
+Experiment: PD4T_sr_5_i3d_lr_0.001_len_32_sz_224
+Loading dataset...
+Dataset size: 667
+Building model...
+Starting training...
+Traceback (most recent call last):
+  File "/home2/gun3856/PECoP/train_simple.py", line 412, in <module>
+    train(args)
+  File "/home2/gun3856/PECoP/train_simple.py", line 331, in train
+    for i, (rgb_clip, labels) in enumerate(dataloader):
+  File "/home2/gun3856/miniconda3/envs/pecop/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 708, in __next__
+    data = self._next_data()
+  File "/home2/gun3856/miniconda3/envs/pecop/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 764, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home2/gun3856/miniconda3/envs/pecop/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home2/gun3856/miniconda3/envs/pecop/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home2/gun3856/PECoP/train_simple.py", line 131, in __getitem__
+    video_path = self._find_video_path(visit_id, patient_id)
+  File "/home2/gun3856/PECoP/train_simple.py", line 198, in _find_video_path
+    raise RuntimeError(f"Cannot find video: {visit_id} in {task_dir}")
+RuntimeError: Cannot find video: 15-000258 in /home2/gun3856/PD4T_Videos/Leg agility
