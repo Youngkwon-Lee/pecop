@@ -8,6 +8,10 @@ TASK=${1:-Gait}
 EPOCHS=${2:-8}
 BS=${3:-8}
 
+# Conda 환경 활성화 (매우 중요!)
+source /home2/gun3856/miniconda3/etc/profile.d/conda.sh
+conda activate pecop
+
 # 환경 설정
 export CUDA_VISIBLE_DEVICES=0
 export OMP_NUM_THREADS=8
