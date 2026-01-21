@@ -154,8 +154,9 @@ class PD4T_Dataset(Dataset):
     def _find_video_path(self, visit_id, patient_id):
         """Find video path in the correct task directory
 
-        For Gait: Videos/Gait/PatientID/visit_id.mp4
-        For others: Videos/Task/PatientID/visit_id_l|r.mp4
+        visit_id format:
+        - Gait: "15-001760" (no suffix)
+        - Other tasks: "12-104704_l" or "12-104704_r" (with suffix in data_list)
         """
         task_dir = os.path.join(self.video_root, self.task)
 
@@ -164,12 +165,13 @@ class PD4T_Dataset(Dataset):
 
         # First try with the provided patient_id
         if patient_id and os.path.isdir(os.path.join(task_dir, patient_id)):
+            # Try direct match first (visit_id may already include _l/_r suffix)
             video_path = os.path.join(task_dir, patient_id, f'{visit_id}.mp4')
             if os.path.exists(video_path):
                 return video_path
 
-            # Try with suffixes for non-Gait tasks
-            if self.task != 'Gait':
+            # Try with suffixes for Gait (which doesn't have suffix in visit_id)
+            if self.task == 'Gait':
                 for suffix in ['_l', '_r']:
                     video_path = os.path.join(task_dir, patient_id, f'{visit_id}{suffix}.mp4')
                     if os.path.exists(video_path):
@@ -181,13 +183,13 @@ class PD4T_Dataset(Dataset):
             if not os.path.isdir(patient_path):
                 continue
 
-            # Try without suffix (Gait)
+            # Try direct match
             video_path = os.path.join(patient_path, f'{visit_id}.mp4')
             if os.path.exists(video_path):
                 return video_path
 
-            # Try with suffixes (other tasks)
-            if self.task != 'Gait':
+            # Try with suffixes for Gait
+            if self.task == 'Gait':
                 for suffix in ['_l', '_r']:
                     video_path = os.path.join(patient_path, f'{visit_id}{suffix}.mp4')
                     if os.path.exists(video_path):

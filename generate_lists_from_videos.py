@@ -52,7 +52,15 @@ def generate_lists(video_root, output_dir):
 
             for video_file in videos:
                 video_path = os.path.join(patient_path, video_file)
-                visit_id = video_file.replace('.mp4', '')  # e.g., "15-001760"
+
+                # For non-Gait tasks, keep the full filename including _l/_r suffix
+                # For Gait, remove .mp4 extension
+                if task == 'Gait':
+                    visit_id = video_file.replace('.mp4', '')  # e.g., "15-001760"
+                else:
+                    # For other tasks, keep _l or _r suffix
+                    # video_file: "12-104704_l.mp4" -> visit_id: "12-104704_l"
+                    visit_id = video_file.replace('.mp4', '')  # e.g., "12-104704_l"
 
                 # Get frame count
                 frame_count = get_video_frame_count(video_path)
