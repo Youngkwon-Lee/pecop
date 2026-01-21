@@ -128,7 +128,11 @@ class PD4T_Dataset(Dataset):
         visit_id = parts[0] if len(parts) > 1 else video_name
 
         # Build video path
-        video_path = self._find_video_path(visit_id, patient_id)
+        try:
+            video_path = self._find_video_path(visit_id, patient_id)
+        except RuntimeError:
+            # Skip missing videos - try next sample
+            return self.__getitem__((idx + 1) % len(self.samples))
 
         if not os.path.exists(video_path):
             raise RuntimeError(f"Video not found: {video_path}")
