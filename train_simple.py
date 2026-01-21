@@ -34,6 +34,18 @@ class PD4T_Dataset(Dataset):
         self.max_sr = max_sr
         self.max_segment = max_segment
         self.fr = fr
+        self.data_list = data_list
+
+        # Extract task name from data_list path
+        basename = os.path.basename(data_list)  # Get "Gait_train.list"
+        if 'Hand' in basename:
+            self.task = 'Hand movement'
+        elif 'Finger' in basename:
+            self.task = 'Finger tapping'
+        elif 'Leg' in basename:
+            self.task = 'Leg agility'
+        else:
+            self.task = 'Gait'
 
     def __len__(self):
         return len(self.samples)
@@ -137,53 +149,48 @@ class PD4T_Dataset(Dataset):
         return frames_tensor, np.array([label_speed, label_segment])
 
     def _find_video_path(self, visit_id, patient_id):
-        """Find video path by searching in Videos directory
+        """Find video path in the correct task directory
 
         For Gait: Videos/Gait/PatientID/visit_id.mp4
-        For others: Videos/Task/PatientID/visit_id_position.mp4 (position: l or r)
+        For others: Videos/Task/PatientID/visit_id_l|r.mp4
         """
-        tasks = ['Gait', 'Hand movement', 'Finger tapping', 'Leg agility']
+        task_dir = os.path.join(self.video_root, self.task)
 
-        # First, try with the provided patient_id
-        for task in tasks:
-            task_dir = os.path.join(self.video_root, task)
+        if not os.path.isdir(task_dir):
+            raise RuntimeError(f"Task directory not found: {task_dir}")
 
-            # Try exact patient_id
-            if os.path.isdir(os.path.join(task_dir, patient_id)):
-                video_path = os.path.join(task_dir, patient_id, f'{visit_id}.mp4')
-                if os.path.exists(video_path):
-                    return video_path
+        # First try with the provided patient_id
+        if patient_id and os.path.isdir(os.path.join(task_dir, patient_id)):
+            video_path = os.path.join(task_dir, patient_id, f'{visit_id}.mp4')
+            if os.path.exists(video_path):
+                return video_path
 
-                # Try with suffixes for non-Gait tasks
-                if task != 'Gait':
-                    for suffix in ['_l', '_r']:
-                        video_path = os.path.join(task_dir, patient_id, f'{visit_id}{suffix}.mp4')
-                        if os.path.exists(video_path):
-                            return video_path
+            # Try with suffixes for non-Gait tasks
+            if self.task != 'Gait':
+                for suffix in ['_l', '_r']:
+                    video_path = os.path.join(task_dir, patient_id, f'{visit_id}{suffix}.mp4')
+                    if os.path.exists(video_path):
+                        return video_path
 
-        # If not found, search all patient folders (data list may have wrong patient_id)
-        for task in tasks:
-            task_dir = os.path.join(self.video_root, task)
-            if not os.path.isdir(task_dir):
+        # If not found, search all patient folders in this task
+        for patient_folder in sorted(os.listdir(task_dir)):
+            patient_path = os.path.join(task_dir, patient_folder)
+            if not os.path.isdir(patient_path):
                 continue
 
-            for patient_folder in os.listdir(task_dir):
-                patient_path = os.path.join(task_dir, patient_folder)
-                if not os.path.isdir(patient_path):
-                    continue
+            # Try without suffix (Gait)
+            video_path = os.path.join(patient_path, f'{visit_id}.mp4')
+            if os.path.exists(video_path):
+                return video_path
 
-                # Try without suffix
-                video_path = os.path.join(patient_path, f'{visit_id}.mp4')
-                if os.path.exists(video_path):
-                    return video_path
-
-                # Try with suffixes
+            # Try with suffixes (other tasks)
+            if self.task != 'Gait':
                 for suffix in ['_l', '_r']:
                     video_path = os.path.join(patient_path, f'{visit_id}{suffix}.mp4')
                     if os.path.exists(video_path):
                         return video_path
 
-        raise RuntimeError(f"Cannot find video: {visit_id} for patient {patient_id}")
+        raise RuntimeError(f"Cannot find video: {visit_id} in {task_dir}")
 
 
 class VSPP(nn.Module):
