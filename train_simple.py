@@ -144,16 +144,42 @@ class PD4T_Dataset(Dataset):
         """
         tasks = ['Gait', 'Hand movement', 'Finger tapping', 'Leg agility']
 
+        # First, try with the provided patient_id
         for task in tasks:
-            # Try direct match first (Gait)
-            video_path = os.path.join(self.video_root, task, patient_id, f'{visit_id}.mp4')
-            if os.path.exists(video_path):
-                return video_path
+            task_dir = os.path.join(self.video_root, task)
 
-            # For other tasks, try with _l (left) and _r (right) suffix
-            if task != 'Gait':
+            # Try exact patient_id
+            if os.path.isdir(os.path.join(task_dir, patient_id)):
+                video_path = os.path.join(task_dir, patient_id, f'{visit_id}.mp4')
+                if os.path.exists(video_path):
+                    return video_path
+
+                # Try with suffixes for non-Gait tasks
+                if task != 'Gait':
+                    for suffix in ['_l', '_r']:
+                        video_path = os.path.join(task_dir, patient_id, f'{visit_id}{suffix}.mp4')
+                        if os.path.exists(video_path):
+                            return video_path
+
+        # If not found, search all patient folders (data list may have wrong patient_id)
+        for task in tasks:
+            task_dir = os.path.join(self.video_root, task)
+            if not os.path.isdir(task_dir):
+                continue
+
+            for patient_folder in os.listdir(task_dir):
+                patient_path = os.path.join(task_dir, patient_folder)
+                if not os.path.isdir(patient_path):
+                    continue
+
+                # Try without suffix
+                video_path = os.path.join(patient_path, f'{visit_id}.mp4')
+                if os.path.exists(video_path):
+                    return video_path
+
+                # Try with suffixes
                 for suffix in ['_l', '_r']:
-                    video_path = os.path.join(self.video_root, task, patient_id, f'{visit_id}{suffix}.mp4')
+                    video_path = os.path.join(patient_path, f'{visit_id}{suffix}.mp4')
                     if os.path.exists(video_path):
                         return video_path
 
