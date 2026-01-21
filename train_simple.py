@@ -21,13 +21,38 @@ class PD4T_Dataset(Dataset):
             lines = f.readlines()
 
         self.samples = []
+        skipped_count = 0
+
         for line in lines:
             parts = line.strip().split()
             video_name = parts[0]
             score = int(parts[1])
             num_frames = int(parts[2])
             patient_id = parts[3]
-            self.samples.append((video_name, score, num_frames, patient_id))
+
+            # Pre-filter: only include samples where video exists
+            # Extract task from data_list path
+            basename = os.path.basename(data_list)
+            if 'Hand' in basename:
+                task = 'Hand movement'
+            elif 'Finger' in basename:
+                task = 'Finger tapping'
+            elif 'Leg' in basename:
+                task = 'Leg agility'
+            else:
+                task = 'Gait'
+
+            # Check if video file exists
+            task_dir = os.path.join(video_root, task)
+            video_path = os.path.join(task_dir, patient_id, f'{video_name}.mp4')
+
+            if os.path.exists(video_path):
+                self.samples.append((video_name, score, num_frames, patient_id))
+            else:
+                skipped_count += 1
+
+        if skipped_count > 0:
+            print(f"[Dataset] Loaded {len(self.samples)} valid samples, skipped {skipped_count} missing videos")
 
         # Normalize video_root path (handle ~ and relative paths)
         self.video_root = os.path.expanduser(video_root)
@@ -128,11 +153,7 @@ class PD4T_Dataset(Dataset):
         visit_id = parts[0] if len(parts) > 1 else video_name
 
         # Build video path
-        try:
-            video_path = self._find_video_path(visit_id, patient_id)
-        except RuntimeError:
-            # Skip missing videos - try next sample
-            return self.__getitem__((idx + 1) % len(self.samples))
+        video_path = self._find_video_path(visit_id, patient_id)
 
         if not os.path.exists(video_path):
             raise RuntimeError(f"Video not found: {video_path}")
