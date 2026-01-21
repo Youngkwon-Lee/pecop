@@ -38,6 +38,7 @@ def generate_lists(video_root, output_dir):
 
         train_list = []
         test_list = []
+        skipped_count = 0
 
         # Walk through patient folders
         for patient_folder in sorted(os.listdir(task_dir)):
@@ -57,7 +58,11 @@ def generate_lists(video_root, output_dir):
                 frame_count = get_video_frame_count(video_path)
 
                 if frame_count == 0:
-                    print(f"  Skipping {video_file} (frame count = 0)")
+                    skipped_count += 1
+                    continue
+
+                if frame_count < 32:  # Skip videos shorter than clip_len
+                    skipped_count += 1
                     continue
 
                 # Create entry: visit_id score num_frames patient_id
@@ -76,6 +81,8 @@ def generate_lists(video_root, output_dir):
             with open(train_file, 'w') as f:
                 f.writelines(train_list)
             print(f"  Created: {train_file} ({len(train_list)} samples)")
+        else:
+            print(f"  No train samples for {task}")
 
         # Write test list
         if test_list:
@@ -83,6 +90,11 @@ def generate_lists(video_root, output_dir):
             with open(test_file, 'w') as f:
                 f.writelines(test_list)
             print(f"  Created: {test_file} ({len(test_list)} samples)")
+        else:
+            print(f"  No test samples for {task}")
+
+        total = len(train_list) + len(test_list)
+        print(f"  Summary: {total} videos ({skipped_count} skipped)")
 
 
 if __name__ == '__main__':
