@@ -15,7 +15,7 @@ export OMP_NUM_THREADS=8
 # 경로
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DATA_ROOT="${SCRIPT_DIR}/datasets/PD4T_frames"
-VIDEO_ROOT="${SCRIPT_DIR}/../../PD4T_Videos"
+VIDEO_ROOT="${HOME}/PD4T_Videos"  # 절대 경로 사용
 PRETRAINED_MODEL="${SCRIPT_DIR}/pretrained_models/model_rgb.pth"
 
 # 로그 디렉토리

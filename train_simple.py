@@ -29,7 +29,10 @@ class PD4T_Dataset(Dataset):
             patient_id = parts[3]
             self.samples.append((video_name, score, num_frames, patient_id))
 
-        self.video_root = video_root
+        # Normalize video_root path (handle ~ and relative paths)
+        self.video_root = os.path.expanduser(video_root)
+        self.video_root = os.path.abspath(self.video_root)
+
         self.clip_len = clip_len
         self.max_sr = max_sr
         self.max_segment = max_segment
